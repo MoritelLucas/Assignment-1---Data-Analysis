@@ -1,0 +1,27 @@
+
+1st:
+export PROJECT=$(gcloud info --format='value(config.project)')
+export REGION=us-central1
+export ZONE=us-central1-a
+gcloud config set compute/zone ${ZONE}
+
+2nd:
+gcloud services enable dataproc.googleapis.com sqladmin.googleapis.com
+
+3th:
+export WAREHOUSE_BUCKET=gs://gcs-bucket-service-cbc3-891a8496-e554-445c-9ae7-65ec2e3a764c
+
+4th:
+gcloud sql instances create hive-metastore \
+    --database-version="MYSQL_5_7" \
+    --activation-policy=ALWAYS \
+    --zone ${ZONE}
+
+final:
+gcloud dataproc clusters create hive-cluster \
+    --scopes sql-admin \
+    --region ${REGION} \
+    --initialization-actions gs://goog-dataproc-initialization-actions-${REGION}/cloud-sql-proxy/cloud-sql-proxy.sh \
+    --properties "hive:hive.metastore.warehouse.dir=gs://${WAREHOUSE_BUCKET}/datasets" \
+    --metadata "hive-metastore-instance=${PROJECT}:${REGION}:hive-metastore" \
+    --metadata "enable-cloud-sql-proxy-on-workers=false"
