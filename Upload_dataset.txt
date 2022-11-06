@@ -1,0 +1,2 @@
+Gsutil dl:
+gsutil cp gs://gcs-bucket-service-cbc3-891a8496-e554-445c-9ae7-65ec2e3a764c/emails.csv .
