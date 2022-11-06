@@ -1,2 +1,20 @@
 Gsutil dl:
 gsutil cp gs://gcs-bucket-service-cbc3-891a8496-e554-445c-9ae7-65ec2e3a764c/emails.csv .
+
+Open Hive:
+hive
+
+create Database:
+create database mail_hive;
+
+use the database:
+use mail_hive
+
+create table:
+create table email(file string);
+
+load CSV in table:
+load data local inpath 'emails.csv' overwrite into table email;
+
+display the top 10 rows:
+select * from email limit 10;

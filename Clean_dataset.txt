@@ -1,0 +1,28 @@
+Set env varaible:
+set hive.support.concurrency = true; 
+set hive.enforce.bucketing = true; 
+set hive.exec.dynamic.partition.mode = nonstrict; 
+set hive.txn.manager = org.apache.hadoop.hive.ql.lockmgr.DbTxnManager; 
+set hive.compactor.initiator.on = true; 
+set hive.compactor.worker.threads =  1; 
+
+Create orc table
+create table email_orc (file string) stored as orc TBLPROPERTIES ('transactional'='true');
+
+Import table to the orc table:
+from email insert into table email_orc select file;
+
+display the top 10 rows:
+select * from email_orc limit 10;
+
+delete html header:
+delete from email_orc where file like '%Mime-Version:%';
+delete from email_orc where file like '%Content-Type:%';
+delete from email_orc where file like '%Content-Transfer-Encoding:%';
+delete from email_orc where file like '%X-From:%';
+delete from email_orc where file like '%X-To:%';
+delete from email_orc where file like '%X-cc:%';
+delete from email_orc where file like '%X-bcc:%';
+delete from email_orc where file like '%X-Folder:%';
+delete from email_orc where file like '%X-Origin:%';
+delete from email_orc where file like '%X-FileName:%';
